@@ -1,0 +1,16 @@
+mysql:
+  insert:
+    sql:
+      main: "INSERT INTO tbadcode (badCodeId, factoryId, badCodeName, badCodeDescription,badCodePhenomenon, badItemId,
+             badCodeGrade, AddUser, AddTime, EditUser, EditTime)
+             VALUES
+             ('${badcodebo.site},${badcodebo.badcodename}', #{badcodebo.site}, #{badcodebo.badcodename},
+             #{badcodebo.description},#{badcodebo.phenomenon}, NULL, NULL, #{user}, now(),  #{user}, now())"
+
+tags:
+  badcodebo:
+    refsql: main
+    site: {type: plain, dbType: varchar}
+    badcodename: {type: plain, dbType: varchar}
+    description: {type: plain, dbType: varchar}
+    phenomenon: {type: plain, dbType: varchar}

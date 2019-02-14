@@ -1,0 +1,21 @@
+server:
+  port: 8085
+  servlet:
+    context-path: /test
+
+sites: default,A666,A777
+
+hikari: {
+  A888: {
+    jdbc-url: "jdbc:mysql://127.0.0.1:3306/loadsys?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&useSSL=false",
+    username: root,
+    password: 123456
+  }
+}
+
+logging:
+  config: classpath:logback-spring.xml
+
+spring:
+  main:
+    banner-mode: "off"

@@ -1,0 +1,20 @@
+mysql:
+  insert:
+    sql:
+      main: "INSERT INTO tbasemodel (BaseModelID, FactoryID, BaseModelCode, BaseModelName, ParentBaseModelID, BaseModelType,
+       AddUser, AddTime, EditUser, EditTime, IsEnable)
+       VALUES ('tbasemodel:${basemodelbo.site},${basemodelbo.basemodelcode}', #{basemodelbo.site}, #{basemodelbo.basemodelcode},
+       #{basemodelbo.basemodelname}, #{basemodelbo.parentmodelbo}, #{basemodelbo.basemodellevel},
+       #{user}, now(), #{user}, now(), #{basemodelbo.status})"
+
+
+tags:
+  basemodelbo:
+    refsql: main
+    site: {type: plain, dbType: varchar}
+    basemodelcode: {type: plain, dbType: varchar}
+    basemodelname: {type: plain, dbType: varchar}
+    parentmodelbo: {type: foreignkey, dbType: varchar, format: 'tbasemodel:${site},${basemodelcode}'}
+    basemodellevel: {type: plain, dbType: varchar}
+    status: {type: plain, dbType: varchar}
+

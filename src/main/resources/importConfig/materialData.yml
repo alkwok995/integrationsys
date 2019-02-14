@@ -1,0 +1,38 @@
+mysql:
+  insert:
+    sql:
+      main: "INSERT INTO tbasematerialdata (MaterialDataID, FactoryID, MaterialNumber, Description,
+            MaterialStatusCode, MaterialTypeCode, JointTypeCode, SourceTypeCode, ConsumptionTypeCode, OrderType,
+            MeteringUnitCode, StockCode, StockBatchNumber, sfcBatchNumber, MinimumBatchNumber, DafaultCurrentVersion,
+            AlternateEnable, IsEnable, TechniqueDataId, IsDelete, QtyUp, QtyLower, DispatchLevel, AddUser, AddTime,
+            EditUser, EditTime, isbox)
+            VALUES ('${materialbo.site},${materialbo.materialcode}', #{materialbo.site}, #{materialbo.materialcode},
+             #{materialbo.description}, #{materialbo.materialstatus}, #{materialbo.materialtype}, '0',
+             '2', '1', '3',
+             #{materialbo.meteringunitcode}, '1', 1,
+             1, #{materialbo.minimumbatchnumber}, NULL, 0,
+             0, NULL, b'0', NULL, NULL, NULL, #{user}, now(), #{user},
+             now(), 1)"
+      materialVersion: "INSERT INTO tbasematerialdataversion (materialDataVersionId, factoryId, materialDataId,
+                       versionNumber, description, state, routeId)
+                       VALUES ('${materialbo.site},${materialbo.materialcode}_${materialbo.versionbo.versioncode}',
+                        #{materialbo.site}, '${materialbo.site},${materialbo.materialcode}',
+                        #{materialbo.versionbo.versioncode}, #{materialbo.versionbo.description}, '10',
+                        '')"
+
+tags:
+  materialbo:
+    refsql: main
+    site: {type: plain, dbType: varchar}
+    materialcode: {type: plain, dbType: varchar}
+    description: {type: plain, dbType: varchar}
+    materialstatus: {type: plain, dbType: varchar}
+    materialtype: {type: plain, dbType: varchar}
+    meteringunitcode: {type: plain, dbType: varchar}
+    minimumbatchnumber: {type: plain, dbType: int, default: 0}
+    versionbo:
+      type: subtable
+      refsql: materialVersion
+      versioncode: {type: plain, dbType: varchar}
+      description: {type: plain, dbType: varchar}
+      #route: {type: foreignkey, dbType: varchar, format: '${site},${routecode},${routeversion}'}

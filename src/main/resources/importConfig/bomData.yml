@@ -1,0 +1,39 @@
+mysql:
+  insert:
+    sql:
+      main: "INSERT INTO tbasebomdata (BOMDataID, MaterialDataID, MaterialDataVersionID, FactoryID, BOMTypeID, BOMStateID, AddUser, AddTime, EditUser, EditTime)
+             VALUES
+             ('${bombo.site},${bombo.site},${bombo.materialcode},${bombo.site},${bombo.materialcode},${bombo.materialversion}',
+             '${bombo.site},${bombo.materialcode}','${bombo.site},${bombo.materialcode}_${bombo.materialversion}',#{bombo.site},
+             #{bombo.bomtype},#{bombo.status},#{user},now(),#{user},now())"
+      assembly: "INSERT INTO tbasebomassembly (BOMAssemblyID, BomDataID, AssemblyLine, MaterialID, MaterialVersionID,
+                 ComponentCount, FactoryID, location, IsReplace, AssemblyTechnique, retroactive, AddUser, AddTime, EditUser, EditTime)
+                 VALUES (CONCAT('${bombo.site},',DATE_FORMAT(NOW(),'%Y%m%d%H%i%s'),LPAD(${bombo.assemblybo.rowindex},3,0)),
+                 '${bombo.site},${bombo.site},${bombo.materialcode},${bombo.site},${bombo.materialcode},${bombo.materialversion}',
+                 #{bombo.assemblybo.line},
+                 '${bombo.site},${bombo.assemblybo.materialcode}',
+                 '${bombo.site},${bombo.assemblybo.materialcode}_${bombo.assemblybo.materialversion}',
+                 #{bombo.assemblybo.count},#{bombo.site},
+                  nullif('${bombo.assemblybo.location}',''),#{bombo.assemblybo.isreplace},
+                 '${bombo.site},${bombo.assemblybo.operation}',#{bombo.assemblybo.trackway},#{user},now(),#{user},now())"
+
+tags:
+  bombo:
+    refsql: main
+    materialcode: {type: plain, dbType: varchar}
+    materialversion: {type: plain, dbType: varchar}
+    site: {type: plain, dbType: varchar}
+    bomtype: {type: plain, dbType: varchar}
+    status: {type: plain, dbType: varchar}
+    assemblybo:
+      type: subtable
+      refsql: assembly
+      rowindex: {type: plain, dbType: int}
+      line: {type: plain, dbType: int}
+      materialcode: {type: plain, dbType: varchar}
+      materialversion: {type: plain, dbType: varchar}
+      operation: {type: plain, dbType: varchar}
+      count: {type: plain, dbType: int}
+      location: {type: plain, dbType: varchar}
+      isreplace: {type: plain, dbType: int}
+      trackway: {type: plain, dbType: varchar}

@@ -1,0 +1,25 @@
+mysql:
+  insert:
+    sql:
+      main: "INSERT INTO tsysuser (UserID, UserName, Sex, DeptID, State, AddUser, AddTime, EditUser, EditTime, factoryId,
+       loginFactoryId,ModelId)
+       VALUES
+       (#{userbo.userid}, #{userbo.username}, #{userbo.sex}, #{userbo.deptid}, #{userbo.status}, #{user}, now(),
+        #{user}, now(), #{userbo.site}, #{userbo.loginsite}, #{userbo.modelid})"
+      logininfo: "INSERT INTO tsysuserlogininfo (UserID, LoginPassword) VALUES (#{userbo.userid},md5('${userbo.logininfo.info}'))"
+
+tags:
+  userbo:
+    refsql: main
+    userid: {type: plain, dbType: varchar}
+    username: {type: plain, dbType: varchar}
+    sex: {type: plain, dbType: varchar}
+    modelid: {type: foreignkey, dbType: varchar, format: 'tbaseModel:${site},${model}', test: "bool(value.endsWith(',*')):'*';else:${value}"}
+    deptid: {type: plain, dbType: varchar}
+    status: {type: plain, dbType: varchar}
+    site: {type: plain, dbType: varchar}
+    loginsite: {type: plain, dbType: varchar}
+    logininfo:
+      type: subtable
+      refsql: logininfo
+      info: {type: plain, dbType: varchar}
